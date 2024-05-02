@@ -12,6 +12,6 @@ abstract class BaseService
 
         return $this;
     }
-
+ 
     abstract function handle();
 }
