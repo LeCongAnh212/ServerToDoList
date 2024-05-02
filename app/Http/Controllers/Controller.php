@@ -34,7 +34,7 @@ class Controller extends BaseController
     public function responseSuccess($data, $statusCode = Response::HTTP_OK)
     {
         return response()->json(
-            array_merge(['code' => $statusCode], $data),
+            array_merge(['status' => $statusCode], $data),
             $statusCode
         );
     }
