@@ -30,7 +30,14 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('/create', [TaskController::class, 'create']);
         Route::post('/delete', [TaskController::class, 'detele']);
         Route::post('/update', [TaskController::class, 'update']);
+
+        Route::get('/data-finished', [TaskController::class, 'getDataFinished']);
     });
 
+
     Route::get('/type-task', [TaskController::class, 'getTypeTask']);
+});
+
+Route::group(['prefix' => 'user'], function () {
+    Route::get('/test', [UserController::class, 'testMail']);
 });

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\User\CreateUserRequest;
+use App\Mail\TestMail;
 use App\Models\User;
 use App\Services\User\CreateUserService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
@@ -55,5 +57,11 @@ class UserController extends Controller
         }
 
         return $this->responseErrors(__('messages.incorrect_information'), Response::HTTP_UNAUTHORIZED);
+    }
+
+    public function testMail(){
+        $dataMail = [];
+        Mail::to('conganh2122003@gmail.com')->send(new TestMail($dataMail));
+        return true;
     }
 }

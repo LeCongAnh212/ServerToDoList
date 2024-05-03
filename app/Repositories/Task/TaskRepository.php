@@ -3,6 +3,7 @@
 namespace App\Repositories\Task;
 
 use App\Enums\StatusDelete;
+use App\Enums\TaskStatus;
 use App\Interfaces\Task\TaskRepositoryInterface;
 use App\Models\Task;
 use App\Repositories\BaseRepository;
@@ -38,5 +39,10 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
 
             return false;
         }
+    }
+
+    public function getTaskFinished()
+    {
+        return $this->model->where('status', TaskStatus::FINISHED)->get();
     }
 }

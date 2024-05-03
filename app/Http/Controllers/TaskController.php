@@ -9,6 +9,7 @@ use App\Services\Subtask\DeleteSubtaskService;
 use App\Services\Task\CreateTaskService;
 use App\Services\Task\DeleteTaskService;
 use App\Services\Task\GetDataService;
+use App\Services\Task\GetTaskFinishedService;
 use App\Services\Task\UpdateTaskService;
 use App\Services\TypeTask\GetTypeTaskService;
 use Illuminate\Http\Request;
@@ -108,6 +109,11 @@ class TaskController extends Controller
         return $this->responseErrors(__('messages.error_server'));
     }
 
+    /**
+     * update task and subtasks
+     * @param \App\Http\Requests\Task\CreateTaskRequest $request
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
     public function update(CreateTaskRequest $request)
     {
         $task = resolve(UpdateTaskService::class)->setParams($request->all())->handle();
@@ -131,5 +137,24 @@ class TaskController extends Controller
         }
 
         return $this->responseErrors(__('messages.error_server'));
+    }
+
+    /**
+     * get task finished
+     * @param \Illuminate\Http\Request $request
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
+    public function getDataFinished()
+    {
+        $tasks = resolve(GetTaskFinishedService::class)->handle();
+
+        if($tasks){
+            return $this->responseSuccess([
+                'tasks' =>  $tasks
+            ]);
+        }
+
+        return $this->responseErrors(__('messages.error_server'));
+
     }
 }
