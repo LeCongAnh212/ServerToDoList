@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Task\CreateTaskRequest;
 use App\Models\Task;
 use App\Services\Subtask\CreateSubtaskService;
+use App\Services\Subtask\DeleteSubtaskService;
 use App\Services\Task\CreateTaskService;
 use App\Services\Task\DeleteTaskService;
 use App\Services\Task\GetDataService;
@@ -110,6 +111,17 @@ class TaskController extends Controller
     public function update(CreateTaskRequest $request)
     {
         $task = resolve(UpdateTaskService::class)->setParams($request->all())->handle();
+
+        foreach ($request->idDeleteSubtask as $key => $value) {
+            $check = resolve(DeleteSubtaskService::class)->setParams($value)->handle();
+        }
+
+        foreach ($request->subtasks as $subtask) {
+            if (empty($subtask['id'])) {
+                $subtask['task_id'] = $request->id;
+                resolve(CreateSubtaskService::class)->setParams($subtask)->handle();
+            }
+        }
 
         if ($task) {
             return $this->responseSuccess([

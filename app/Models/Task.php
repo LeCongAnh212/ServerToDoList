@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\StatusDelete;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,7 +20,7 @@ class Task extends Model
     ];
 
     public function subtasks(){
-        return $this->hasMany(Subtask::class);
+        return $this->hasMany(Subtask::class)->where('is_delete', StatusDelete::NORMAL);
     }
 
 }

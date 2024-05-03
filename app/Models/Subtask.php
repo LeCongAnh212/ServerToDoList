@@ -12,5 +12,6 @@ class Subtask extends Model
     protected $fillable = [
         'title',
         'task_id',
+        'is_delete',
     ];
 }
