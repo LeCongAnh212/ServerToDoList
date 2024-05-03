@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('task_subtasks', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('task_id')->constrained();
-            $table->foreignId('subtask_id')->constrained();
-            $table->timestamps();
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->tinyInteger('is_delete')->default(0);
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('task_subtasks');
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->dropColumn('is_delete');
+        });
     }
 };

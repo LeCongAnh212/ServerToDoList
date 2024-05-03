@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('subtasks', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->foreignId('task_id')->constrained();
-            $table->timestamps();
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->foreignId('type_id')->nullable()->constrained('type_tasks');
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('subtasks');
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->dropColumn('type_id');
+        });
     }
 };

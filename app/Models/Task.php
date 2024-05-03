@@ -14,5 +14,12 @@ class Task extends Model
         'description',
         'status',
         'deadline',
+        'type_id',
+        'user_id'
     ];
+
+    public function subtasks(){
+        return $this->hasMany(Subtask::class);
+    }
+
 }
