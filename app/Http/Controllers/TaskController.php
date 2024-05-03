@@ -8,6 +8,7 @@ use App\Services\Subtask\CreateSubtaskService;
 use App\Services\Task\CreateTaskService;
 use App\Services\Task\DeleteTaskService;
 use App\Services\Task\GetDataService;
+use App\Services\Task\UpdateTaskService;
 use App\Services\TypeTask\GetTypeTaskService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -100,6 +101,20 @@ class TaskController extends Controller
         if ($task) {
             return $this->responseSuccess([
                 'message' => __('messages.delete_success')
+            ]);
+        }
+
+        return $this->responseErrors(__('messages.error_server'));
+    }
+
+    public function update(CreateTaskRequest $request)
+    {
+        $task = resolve(UpdateTaskService::class)->setParams($request->all())->handle();
+
+        if ($task) {
+            return $this->responseSuccess([
+                'task' => $task,
+                'message' => __('messages.update_success')
             ]);
         }
 

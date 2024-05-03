@@ -29,6 +29,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('/data', [TaskController::class, 'getData']);
         Route::post('/create', [TaskController::class, 'create']);
         Route::post('/delete', [TaskController::class, 'detele']);
+        Route::post('/update', [TaskController::class, 'update']);
     });
 
     Route::get('/type-task', [TaskController::class, 'getTypeTask']);
