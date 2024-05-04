@@ -29,7 +29,7 @@ class SendMailCron extends Command
      */
     public function handle(Request $request)
     {
-          resolve(HandleSendMail::class)->handle();
+        resolve(HandleSendMail::class)->handle();
 
         $this->info('sendMail:cron Cummand Run successfully!');
     }

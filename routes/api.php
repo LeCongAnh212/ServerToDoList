@@ -32,6 +32,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('/update', [TaskController::class, 'update']);
 
         Route::get('/data-finished', [TaskController::class, 'getDataFinished']);
+        Route::get('/data-unfinished', [TaskController::class, 'getDataUnFinished']);
     });
 
 

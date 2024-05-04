@@ -2,11 +2,11 @@
 
 namespace App\Services\Task;
 
-use App\Enums\TaskStatus;
 use App\Repositories\Task\TaskRepository;
 use App\Services\BaseService;
+use Illuminate\Support\Facades\Log;
 
-class GetTaskFinishedService extends BaseService
+class FindTaskByIdService extends BaseService
 {
     protected $taskRepository;
 
@@ -17,7 +17,13 @@ class GetTaskFinishedService extends BaseService
 
     public function handle()
     {
-        return $this->taskRepository->getTasksByStatus(TaskStatus::FINISHED);
+        try {
+            return $this->taskRepository->findTaskById($this->data);
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+
+            return false;
+        }
     }
 }
 

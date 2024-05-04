@@ -16,6 +16,10 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
         $this->model = $task;
     }
 
+    /**
+     * fetch all tasks with subtasks property
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
     public function getDataAllTaskWithSubtasks()
     {
         return $this->model->with('subtasks')
@@ -26,6 +30,11 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
             ->get();
     }
 
+    /**
+     * delete task by id
+     * @param mixed $id
+     * @return bool
+     */
     public function deleteTask($id)
     {
         try {
@@ -41,8 +50,32 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
         }
     }
 
-    public function getTaskFinished()
+    /**
+     * get task by status
+     * @param mixed $status
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function getTasksByStatus($status)
     {
-        return $this->model->where('status', TaskStatus::FINISHED)->get();
+        return $this->model->with('subtasks')
+            ->join('type_tasks', 'tasks.type_id', 'type_tasks.id')
+            ->select('tasks.*', 'type_tasks.name as type_name', 'type_tasks.id as type_id')
+            ->where('tasks.is_delete', StatusDelete::NORMAL)
+            ->where('tasks.status', $status)
+            ->orderByDESC('created_at')
+            ->get();
+    }
+
+    /**
+     * find task by id contains subtasks and type
+     * @param mixed $id
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null
+     */
+    public function findTaskById($id)
+    {
+        return $this->model->with('subtasks')
+            ->join('type_tasks', 'tasks.type_id', 'type_tasks.id')
+            ->select('tasks.*', 'type_tasks.name as type_name', 'type_tasks.id as type_id')
+            ->find($id);
     }
 }

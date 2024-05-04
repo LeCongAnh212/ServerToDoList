@@ -8,8 +8,10 @@ use App\Services\Subtask\CreateSubtaskService;
 use App\Services\Subtask\DeleteSubtaskService;
 use App\Services\Task\CreateTaskService;
 use App\Services\Task\DeleteTaskService;
+use App\Services\Task\FindTaskByIdService;
 use App\Services\Task\GetDataService;
 use App\Services\Task\GetTaskFinishedService;
+use App\Services\Task\GetTaskUnFinishedService;
 use App\Services\Task\UpdateTaskService;
 use App\Services\TypeTask\GetTypeTaskService;
 use Illuminate\Http\Request;
@@ -69,13 +71,12 @@ class TaskController extends Controller
 
             $task = resolve(CreateTaskService::class)->setParams($data)->handle();
 
-            $subtasks = [];
             foreach ($request->subtasks as $subtaskData) {
                 $subtaskData['task_id'] = $task->id;
-                $subtask = resolve(CreateSubtaskService::class)->setParams($subtaskData)->handle();
-                $subtasks[] = $subtask;
+                resolve(CreateSubtaskService::class)->setParams($subtaskData)->handle();
             }
-            $task['subtasks'] = $subtasks;
+
+            $task = resolve(FindTaskByIdService::class)->setParams($task->id)->handle();
 
             DB::commit();
 
@@ -118,18 +119,20 @@ class TaskController extends Controller
     {
         $task = resolve(UpdateTaskService::class)->setParams($request->all())->handle();
 
-        foreach ($request->idDeleteSubtask as $key => $value) {
-            $check = resolve(DeleteSubtaskService::class)->setParams($value)->handle();
-        }
-
-        foreach ($request->subtasks as $subtask) {
-            if (empty($subtask['id'])) {
-                $subtask['task_id'] = $request->id;
-                resolve(CreateSubtaskService::class)->setParams($subtask)->handle();
-            }
-        }
-
         if ($task) {
+            $task = resolve(FindTaskByIdService::class)->setParams($task->id)->handle();
+
+            foreach ($request->idDeleteSubtask as $key => $value) {
+                resolve(DeleteSubtaskService::class)->setParams($value)->handle();
+            }
+
+            foreach ($request->subtasks as $subtask) {
+                if (empty($subtask['id'])) {
+                    $subtask['task_id'] = $request->id;
+                    resolve(CreateSubtaskService::class)->setParams($subtask)->handle();
+                }
+            }
+
             return $this->responseSuccess([
                 'task' => $task,
                 'message' => __('messages.update_success')
@@ -148,13 +151,29 @@ class TaskController extends Controller
     {
         $tasks = resolve(GetTaskFinishedService::class)->handle();
 
-        if($tasks){
+        if ($tasks) {
             return $this->responseSuccess([
                 'tasks' =>  $tasks
             ]);
         }
 
         return $this->responseErrors(__('messages.error_server'));
+    }
 
+    /**
+     * get task unfinished
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
+    public function getDataUnFinished()
+    {
+        $tasks = resolve(GetTaskUnFinishedService::class)->handle();
+
+        if ($tasks) {
+            return $this->responseSuccess([
+                'tasks' =>  $tasks
+            ]);
+        }
+
+        return $this->responseErrors(__('messages.error_server'));
     }
 }
