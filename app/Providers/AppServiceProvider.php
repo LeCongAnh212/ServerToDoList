@@ -8,7 +8,7 @@ use App\Interfaces\TypeTask\TypeTaskRepositoryInterface;
 use App\Interfaces\User\UserRepositoryInterface;
 use App\Models\Task;
 use App\Observers\TaskObserver;
-se App\Repositories\Subtask\SubtaskRepository;
+use App\Repositories\Subtask\SubtaskRepository;
 use App\Repositories\Task\TaskRepository;
 use App\Repositories\TypeTask\TypeTaskRepository;
 use App\Repositories\User\UserRepository;
