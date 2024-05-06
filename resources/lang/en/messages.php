@@ -14,4 +14,6 @@ return [
     'delete_success' => 'Deleted successfully',
     'error_forbidden' => 'Forbidden',
     'create_success' => 'Created successfully',
+    'type_task_exists' => 'Type task already exists',
+    'user_not_found' => 'User not found',
 ];

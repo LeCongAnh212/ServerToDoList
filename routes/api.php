@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TypeTaskController;
 use App\Http\Controllers\UserController;
 use App\Models\Task;
 use Illuminate\Http\Request;
@@ -42,5 +43,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
 
     Route::get('/type-task', [TaskController::class, 'getTypeTask']);
+    Route::post('type-task/create', [TypeTaskController::class, 'createTypeTask']);
     Route::post('search', [TaskController::class, 'search']);
 });
