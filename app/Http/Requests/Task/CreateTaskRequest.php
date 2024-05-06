@@ -24,7 +24,7 @@ class CreateTaskRequest extends FormRequest
         return [
             'title' => 'required|string',
             'type_id' => 'required|exists:type_tasks,id',
-            'deadline' => 'nullable|date|after:today',
+            'deadline' => 'nullable|date|after:now',
             'description' => 'nullable|string',
         ];
     }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\User\CreateUserRequest;
-use App\Mail\TestMail;
+use App\Mail\NotificationMail;
 use App\Models\User;
 use App\Services\User\CreateUserService;
 use Illuminate\Http\Request;
@@ -17,7 +17,7 @@ class UserController extends Controller
     /**
      * register account for user
      * @param CreateUserRequest $request
-     * @return mixed|\Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function register(CreateUserRequest $request)
     {
@@ -36,7 +36,7 @@ class UserController extends Controller
     /**
      * login account for user
      * @param \Illuminate\Http\Request $request
-     * @return mixed|\Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function login(Request $request)
     {
@@ -57,11 +57,5 @@ class UserController extends Controller
         }
 
         return $this->responseErrors(__('messages.incorrect_information'), Response::HTTP_UNAUTHORIZED);
-    }
-
-    public function testMail(){
-        $dataMail = [];
-        Mail::to('conganh2122003@gmail.com')->send(new TestMail($dataMail));
-        return true;
     }
 }

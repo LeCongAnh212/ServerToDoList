@@ -5,4 +5,5 @@ use App\Interfaces\CrudRepositoryInterface;
 
 interface UserRepositoryInterface extends CrudRepositoryInterface
 {
+    public function getTaskOutOfDate();
 }

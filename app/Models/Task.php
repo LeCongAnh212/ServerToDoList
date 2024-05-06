@@ -19,8 +19,13 @@ class Task extends Model
         'user_id'
     ];
 
-    public function subtasks(){
+    public function subtasks()
+    {
         return $this->hasMany(Subtask::class)->where('is_delete', StatusDelete::NORMAL);
     }
 
+    public function typeTasks()
+    {
+        return $this->belongsTo(TypeTask::class, 'type_id');
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Services\Task;
 
+use App\Interfaces\Task\TaskRepositoryInterface;
 use App\Repositories\Task\TaskRepository;
 use App\Services\BaseService;
 use Illuminate\Support\Facades\Log;
@@ -10,7 +11,7 @@ class UpdateTaskService extends BaseService
 {
     protected $taskRepository;
 
-    public function __construct(TaskRepository $taskRepository)
+    public function __construct(TaskRepositoryInterface $taskRepository)
     {
         $this->taskRepository = $taskRepository;
     }

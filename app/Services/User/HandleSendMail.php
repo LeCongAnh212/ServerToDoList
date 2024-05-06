@@ -2,6 +2,7 @@
 
 namespace App\Services\User;
 
+use App\Interfaces\User\UserRepositoryInterface;
 use App\Repositories\User\UserRepository;
 use Illuminate\Support\Facades\Log;
 
@@ -9,7 +10,7 @@ class HandleSendMail extends SendMailToUser
 {
     protected $userRepository;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
     }

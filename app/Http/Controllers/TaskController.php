@@ -12,6 +12,8 @@ use App\Services\Task\FindTaskByIdService;
 use App\Services\Task\GetDataService;
 use App\Services\Task\GetTaskFinishedService;
 use App\Services\Task\GetTaskUnFinishedService;
+use App\Services\Task\HandleCreateTaskService;
+use App\Services\Task\HandleUpdateTaskService;
 use App\Services\Task\UpdateTaskService;
 use App\Services\TypeTask\GetTypeTaskService;
 use Illuminate\Http\Request;
@@ -24,7 +26,7 @@ class TaskController extends Controller
     /**
      * get data task and subtasks
      * @param \Illuminate\Http\Request $request
-     * @return mixed|\Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getData(Request $request)
     {
@@ -41,7 +43,7 @@ class TaskController extends Controller
 
     /**
      * get all type task
-     * @return mixed|\Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getTypeTask()
     {
@@ -59,43 +61,25 @@ class TaskController extends Controller
     /**
      * create task and subtasks
      * @param \App\Http\Requests\Task\CreateTaskRequest $request
-     * @return mixed|\Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function create(CreateTaskRequest $request)
     {
-        try {
-            DB::beginTransaction();
+        $task = resolve(HandleCreateTaskService::class)->setParams($request->all())->handle();
 
-            $data = $request->all();
-            $data['user_id'] = auth()->user()->id;
-
-            $task = resolve(CreateTaskService::class)->setParams($data)->handle();
-
-            foreach ($request->subtasks as $subtaskData) {
-                $subtaskData['task_id'] = $task->id;
-                resolve(CreateSubtaskService::class)->setParams($subtaskData)->handle();
-            }
-
-            $task = resolve(FindTaskByIdService::class)->setParams($task->id)->handle();
-
-            DB::commit();
-
+        if ($task) {
             return $this->responseSuccess([
-                'task' => $task,
-                'message' => __('messages.create_success')
-            ], Response::HTTP_CREATED);
-        } catch (\Throwable $th) {
-            DB::rollBack();
-
-            return $this->responseErrors($th->getMessage());
-            // return $this->responseErrors(__('messages.error_server'));
+                'task' => $task
+            ]);
         }
+
+        return $this->responseErrors(__('messages.error_server'));
     }
 
     /**
      * delete task
      * @param \Illuminate\Http\Request $request
-     * @return mixed|\Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function detele(Request $request)
     {
@@ -113,26 +97,13 @@ class TaskController extends Controller
     /**
      * update task and subtasks
      * @param \App\Http\Requests\Task\CreateTaskRequest $request
-     * @return mixed|\Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(CreateTaskRequest $request)
     {
-        $task = resolve(UpdateTaskService::class)->setParams($request->all())->handle();
+        $task = resolve(HandleUpdateTaskService::class)->setParams($request->all())->handle();
 
-        if ($task) {
-            $task = resolve(FindTaskByIdService::class)->setParams($task->id)->handle();
-
-            foreach ($request->idDeleteSubtask as $key => $value) {
-                resolve(DeleteSubtaskService::class)->setParams($value)->handle();
-            }
-
-            foreach ($request->subtasks as $subtask) {
-                if (empty($subtask['id'])) {
-                    $subtask['task_id'] = $request->id;
-                    resolve(CreateSubtaskService::class)->setParams($subtask)->handle();
-                }
-            }
-
+        if($task) {
             return $this->responseSuccess([
                 'task' => $task,
                 'message' => __('messages.update_success')
@@ -145,7 +116,7 @@ class TaskController extends Controller
     /**
      * get task finished
      * @param \Illuminate\Http\Request $request
-     * @return mixed|\Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getDataFinished()
     {
@@ -162,7 +133,7 @@ class TaskController extends Controller
 
     /**
      * get task unfinished
-     * @return mixed|\Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getDataUnFinished()
     {

@@ -39,6 +39,3 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/type-task', [TaskController::class, 'getTypeTask']);
 });
 
-Route::group(['prefix' => 'user'], function () {
-    Route::get('/test', [UserController::class, 'testMail']);
-});

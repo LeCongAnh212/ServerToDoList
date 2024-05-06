@@ -59,7 +59,7 @@
                                                                                         style="font-size: 0px;">
                                                                                         <a target="_blank">
                                                                                             <img class="adapt-img"
-                                                                                                src="https://ebfbpjd.stripocdn.email/content/guids/CABINET_2d415c695dd7507f8515bfa2056867cd9e41ceaf545555edd753fea519d7eac4/images/socialnetworkingapps_hMy.png"
+                                                                                                src="../../../public/cover.png"
                                                                                                 alt="Image"
                                                                                                 style="display: block;"
                                                                                                 title="Image"

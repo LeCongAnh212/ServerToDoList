@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class TestMail extends Mailable
+class NotificationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -17,14 +17,14 @@ class TestMail extends Mailable
 
     public function __construct($data)
     {
-        $this->data     =   $data;
+        $this->data = $data;
     }
 
     public function build()
     {
         return $this->subject('notification')
             ->view('Mail.ViewMail', [
-                'data'      => $this->data
+                'data' => $this->data
             ]);
     }
 }

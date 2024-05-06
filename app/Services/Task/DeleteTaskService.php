@@ -2,21 +2,28 @@
 
 namespace App\Services\Task;
 
+use App\Interfaces\Task\TaskRepositoryInterface;
 use App\Repositories\Task\TaskRepository;
 use App\Services\BaseService;
+use Illuminate\Support\Facades\Log;
 
 class DeleteTaskService extends BaseService
 {
     protected $taskRepository;
 
-    public function __construct(TaskRepository $taskRepository)
+    public function __construct(TaskRepositoryInterface $taskRepository)
     {
         $this->taskRepository = $taskRepository;
     }
 
     public function handle()
     {
-        return $this->taskRepository->deleteTask($this->data);
-    }
+        try {
+            return $this->taskRepository->deleteTask($this->data);
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
 
+            return false;
+        }
+    }
 }
