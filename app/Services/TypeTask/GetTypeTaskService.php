@@ -12,7 +12,7 @@ class GetTypeTaskService extends BaseService
 {
     protected $typeTaskRepository;
 
-    public function __construct(TypeTaskRepositoryInterface $typeTaskRepository)
+    public function __construct(TypeTaskRepository $typeTaskRepository)
     {
         $this->typeTaskRepository = $typeTaskRepository;
     }

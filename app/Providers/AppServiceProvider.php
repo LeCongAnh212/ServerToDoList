@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+use App\Interfaces\Subtask\SubTaskRepositoryInterface;
 use App\Interfaces\Task\TaskRepositoryInterface;
 use App\Interfaces\TypeTask\TypeTaskRepositoryInterface;
 use App\Interfaces\User\UserRepositoryInterface;
 use App\Models\Task;
 use App\Observers\TaskObserver;
+use App\Repositories\Subtask\SubtaskRepository;
 use App\Repositories\Task\TaskRepository;
 use App\Repositories\TypeTask\TypeTaskRepository;
 use App\Repositories\User\UserRepository;
@@ -22,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(TaskRepositoryInterface::class, TaskRepository::class);
         $this->app->bind(TypeTaskRepositoryInterface::class, TypeTaskRepository::class);
+        $this->app->bind(SubTaskRepositoryInterface::class, SubtaskRepository::class);
     }
 
     /**
