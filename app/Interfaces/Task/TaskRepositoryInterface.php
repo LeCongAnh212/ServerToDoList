@@ -15,4 +15,5 @@ interface TaskRepositoryInterface extends CrudRepositoryInterface
     public function findTaskById($id);
 
     public function getTaskOutDate();
+
 }

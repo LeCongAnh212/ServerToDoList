@@ -42,4 +42,5 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
 
     Route::get('/type-task', [TaskController::class, 'getTypeTask']);
+    Route::post('search', [TaskController::class, 'search']);
 });
