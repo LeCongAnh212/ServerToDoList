@@ -24,7 +24,7 @@ class UserController extends Controller
 
         $user = resolve(CreateUserService::class)->setParams($request->all())->handle();
 
-        if($user){
+        if ($user) {
             return $this->responseSuccess([
                 'message' => __('messages.user.signup_success')
             ], Response::HTTP_CREATED);
@@ -42,7 +42,7 @@ class UserController extends Controller
     {
         $user = User::where('email', $request->email)->first();
 
-        if($user && auth()->attempt(['email' => $request->email, 'password' => $request->password])){
+        if ($user && auth()->attempt(['email' => $request->email, 'password' => $request->password])) {
             $token = auth()->user()->createToken(
                 'authToken',
                 ['*'],
@@ -57,5 +57,35 @@ class UserController extends Controller
         }
 
         return $this->responseErrors(__('messages.incorrect_information'), Response::HTTP_UNAUTHORIZED);
+    }
+
+    /**
+     * check login for user
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function authorization(Request $request)
+    {
+        if ($request->bearerToken()) {
+            return $this->responseSuccess([
+                'status' => true
+            ]);
+        }
+
+        return $this->responseErrors(__('messages.error_server'));
+    }
+
+    public function logout(Request $request)
+    {
+        $user = $request->user();
+
+        if ($user) {
+            $user->currentAccessToken()->delete();
+
+            return $this->responseSuccess([
+                'message' => __('messages.user.logout_success')
+            ]);
+        }
+
+        return $this->responseErrors(__('messages.error_server'));
     }
 }

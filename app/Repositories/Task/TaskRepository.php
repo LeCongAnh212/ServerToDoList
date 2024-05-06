@@ -72,4 +72,16 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
         return $this->model->with('subtasks', 'typeTasks')
             ->find($id);
     }
+
+    /**
+     * get task out date
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function getTaskOutDate()
+    {
+        return $this->model->with('subtasks', 'typeTasks')
+            ->where('tasks.is_delete', StatusDelete::NORMAL)
+            ->where('tasks.deadline', '<', now())
+            ->get();
+    }
 }

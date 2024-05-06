@@ -2,13 +2,11 @@
 
 namespace App\Services\TypeTask;
 
-use App\Interfaces\TypeTask\TypeTaskRepositoryInterface;
-use App\Repositories\Task\TaskRepository;
 use App\Repositories\TypeTask\TypeTaskRepository;
 use App\Services\BaseService;
 use Illuminate\Support\Facades\Log;
 
-class GetTypeTaskService extends BaseService
+class FindTypeTaskByIdService extends BaseService
 {
     protected $typeTaskRepository;
 
@@ -20,7 +18,7 @@ class GetTypeTaskService extends BaseService
     public function handle()
     {
         try {
-            return $this->typeTaskRepository->getTypeTaskWithListTask();
+            return $this->typeTaskRepository->findTypeTaskById($this->data);
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
 

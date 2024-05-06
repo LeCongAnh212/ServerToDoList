@@ -11,9 +11,14 @@ use App\Services\Task\DeleteTaskService;
 use App\Services\Task\FindTaskByIdService;
 use App\Services\Task\GetDataService;
 use App\Services\Task\GetTaskFinishedService;
+use App\Services\Task\GetTaskOutDateService;
 use App\Services\Task\GetTaskUnFinishedService;
 use App\Services\Task\HandleCreateTaskService;
 use App\Services\Task\HandleUpdateTaskService;
+use App\Services\Task\search\SearchAllTaskService;
+use App\Services\Task\search\SearchFinishedTaskService;
+use App\Services\Task\search\SearchOutDateTaskService;
+use App\Services\Task\search\SearchUnFinishedTaskService;
 use App\Services\Task\UpdateTaskService;
 use App\Services\TypeTask\GetTypeTaskService;
 use Illuminate\Http\Request;
@@ -103,7 +108,7 @@ class TaskController extends Controller
     {
         $task = resolve(HandleUpdateTaskService::class)->setParams($request->all())->handle();
 
-        if($task) {
+        if ($task) {
             return $this->responseSuccess([
                 'task' => $task,
                 'message' => __('messages.update_success')
@@ -146,5 +151,38 @@ class TaskController extends Controller
         }
 
         return $this->responseErrors(__('messages.error_server'));
+    }
+
+    /**
+     * get tasks out date
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getDataOutDate()
+    {
+        $tasks = resolve(GetTaskOutDateService::class)->handle();
+
+        if ($tasks) {
+            return $this->responseSuccess([
+                'tasks' => $tasks
+            ]);
+        }
+
+        return $this->responseErrors(__('messages.error_server'));
+    }
+
+    public function search(Request $request)
+    {
+        $allTasks = resolve(SearchAllTaskService::class)->setParams($request->keyword)->handle();
+        $finishedTasks = resolve(SearchFinishedTaskService::class)->setParams($request->keyword)->handle();
+        $unfinishedTasks = resolve(SearchUnFinishedTaskService::class)->setParams($request->keyword)->handle();
+        $outDateTasks = resolve(SearchOutDateTaskService::class)->setParams($request->keyword)->handle();
+
+
+        return $this->responseSuccess([
+            'allTasks' => $allTasks,
+            'finishedTasks' => $finishedTasks,
+            'unfinishedTasks' => $unfinishedTasks,
+            'outDateTasks' => $outDateTasks,
+        ]);
     }
 }
