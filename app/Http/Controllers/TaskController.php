@@ -11,6 +11,7 @@ use App\Services\Task\DeleteTaskService;
 use App\Services\Task\FindTaskByIdService;
 use App\Services\Task\GetDataService;
 use App\Services\Task\GetTaskFinishedService;
+use App\Services\Task\GetTaskOutDateService;
 use App\Services\Task\GetTaskUnFinishedService;
 use App\Services\Task\HandleCreateTaskService;
 use App\Services\Task\HandleUpdateTaskService;
@@ -103,7 +104,7 @@ class TaskController extends Controller
     {
         $task = resolve(HandleUpdateTaskService::class)->setParams($request->all())->handle();
 
-        if($task) {
+        if ($task) {
             return $this->responseSuccess([
                 'task' => $task,
                 'message' => __('messages.update_success')
@@ -142,6 +143,23 @@ class TaskController extends Controller
         if ($tasks) {
             return $this->responseSuccess([
                 'tasks' =>  $tasks
+            ]);
+        }
+
+        return $this->responseErrors(__('messages.error_server'));
+    }
+
+    /**
+     * get tasks out date
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getDataOutDate()
+    {
+        $tasks = resolve(GetTaskOutDateService::class)->handle();
+
+        if ($tasks) {
+            return $this->responseSuccess([
+                'tasks' => $tasks
             ]);
         }
 

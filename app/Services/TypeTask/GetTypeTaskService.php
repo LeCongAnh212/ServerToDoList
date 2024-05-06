@@ -6,7 +6,7 @@ use App\Interfaces\TypeTask\TypeTaskRepositoryInterface;
 use App\Repositories\Task\TaskRepository;
 use App\Repositories\TypeTask\TypeTaskRepository;
 use App\Services\BaseService;
-
+use Illuminate\Support\Facades\Log;
 
 class GetTypeTaskService extends BaseService
 {
@@ -19,6 +19,12 @@ class GetTypeTaskService extends BaseService
 
     public function handle()
     {
-        return $this->typeTaskRepository->all();
+        try {
+            return $this->typeTaskRepository->getTypeTaskWithListTask();
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+
+            return false;
+        }
     }
 }
