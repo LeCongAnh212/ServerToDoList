@@ -2,6 +2,16 @@
 
 namespace App\Providers;
 
+use App\Interfaces\Subtask\SubTaskRepositoryInterface;
+use App\Interfaces\Task\TaskRepositoryInterface;
+use App\Interfaces\TypeTask\TypeTaskRepositoryInterface;
+use App\Interfaces\User\UserRepositoryInterface;
+use App\Models\Task;
+use App\Observers\TaskObserver;
+use App\Repositories\Subtask\SubtaskRepository;
+use App\Repositories\Task\TaskRepository;
+use App\Repositories\TypeTask\TypeTaskRepository;
+use App\Repositories\User\UserRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +21,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
+        $this->app->bind(TaskRepositoryInterface::class, TaskRepository::class);
+        $this->app->bind(TypeTaskRepositoryInterface::class, TypeTaskRepository::class);
+        $this->app->bind(SubTaskRepositoryInterface::class, SubtaskRepository::class);
     }
 
     /**
@@ -19,6 +32,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Task::observe(TaskObserver::class);
     }
 }
